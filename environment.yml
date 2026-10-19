@@ -12,12 +12,12 @@ dependencies:
   - scikit-learn
   - scipy
   - statsmodels
+  - pytorch
+  - torchvision
   - jupyter
   - notebook
   - ipywidgets
   - pip:
-      - torch>=2.2
-      - torchvision>=0.17
       - transformers>=4.40
       - sentence-transformers>=3.0
       - datasets

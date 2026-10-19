@@ -121,6 +121,53 @@ Versions known to work:
 - `torch >= 2.2`
 - `transformers >= 4.40`
 
+### Re-create the environment
+
+Use this when the environment is broken (import errors, version conflicts, half-finished install), when you moved to a new machine, or when `environment.yml` changed after a `git pull`.
+
+**Option A — update in place (try this first, keeps what already works):**
+
+```bash
+cd ~/repos/6m-data-3.1-Introduction-to-Machine-Learning
+conda activate dsai-m3
+conda env update -f environment.yml --prune
+```
+
+`--prune` removes packages no longer listed in `environment.yml`.
+
+**Option B — full rebuild (clean slate):**
+
+```bash
+# 1. Leave the env, then delete it
+conda deactivate
+conda env remove -n dsai-m3
+
+# 2. Re-create it from the repo root
+cd ~/repos/6m-data-3.1-Introduction-to-Machine-Learning
+conda env create -f environment.yml
+conda activate dsai-m3
+
+# 3. Re-install the L01 extras (safe to repeat)
+pip install transformers torch
+```
+
+**Then check it worked:**
+
+```bash
+conda env list                      # dsai-m3 should appear
+python --version                    # Python 3.11.x
+python -c "import torch, transformers, sklearn; print('ok')"
+```
+
+**Afterwards in VS Code:**
+1. **Cmd/Ctrl+Shift+P → "Developer: Reload Window"**
+2. Open a notebook → **Select Kernel** → `dsai-m3`. If it's missing, register it (see Troubleshooting).
+
+> **Notes**
+> - Removing the env does **not** delete the Hugging Face model cache (`~/.cache/huggingface/`), so you won't re-download the ~268 MB model.
+> - Your notebooks and files in the repo are untouched. Only the `dsai-m3` environment is deleted.
+> - Don't hand-edit packages with `pip install` and expect them to survive a rebuild. Add anything you need to `environment.yml`, then rebuild.
+
 ---
 
 ## 4. Install VS Code + Jupyter extension
@@ -257,6 +304,9 @@ Open an issue: https://github.com/6m-data-3.1-Introduction-to-Machine-Learning/i
 |---|---|
 | Activate the env | `conda activate dsai-m3` |
 | Update deps | `pip install -U transformers torch` |
+| Sync env with `environment.yml` | `conda env update -f environment.yml --prune` |
+| Delete env (before rebuild) | `conda deactivate && conda env remove -n dsai-m3` |
+| Re-create env | `conda env create -f environment.yml` |
 | Launch VS Code in repo | `code .` (from the repo root) |
 | Force-kill stuck kernel | `pkill -9 -f ipykernel` |
 | Reload VS Code | `Cmd/Ctrl+Shift+P → "Developer: Reload Window"` |
